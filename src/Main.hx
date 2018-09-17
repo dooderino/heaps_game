@@ -7,13 +7,13 @@ class Main extends hxd.App {
 	override function init() {
 		cache = new h3d.prim.ModelCache();
 
-		var obj = cache.loadModel(hxd.Res.models.test.Model);
+		var obj = cache.loadModel(hxd.Res.models.test.icosahedron);
 		obj.scale(0.1);
 		s3d.addChild(obj);
 		s3d.camera.pos.set( -3, -5, 3);
 		s3d.camera.target.z += 1;
 
-		obj.playAnimation(cache.loadAnimation(hxd.Res.models.test.Model));
+//		obj.playAnimation(cache.loadAnimation(hxd.Res.models.test.Model));
 
 		// add lights and setup materials
 		var dir = new DirLight(new h3d.Vector( -1, 3, -10), s3d);
