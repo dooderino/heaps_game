@@ -1,34 +1,29 @@
 import h3d.scene.*;
+using extensions.ObjectExtensions;
+using extensions.LibraryExtensions;
 
 class Main extends hxd.App {
 
-	var cache : h3d.prim.ModelCache;
-
 	override function init() {
-		cache = new h3d.prim.ModelCache();
-
-		var obj = cache.loadModel(hxd.Res.models.test.icosahedron);
-		obj.scale(0.1);
+		
+		var model = hxd.Res.models.test.icosahedron.toHmd();
+		var obj = model.makeObject();
 		s3d.addChild(obj);
-		s3d.camera.pos.set( -3, -5, 3);
-		s3d.camera.target.z += 1;
 
-//		obj.playAnimation(cache.loadAnimation(hxd.Res.models.test.Model));
+		if (model.HasVertexColors()) {
+			obj.UseVertexColor();
+		}
+
+		s3d.camera.pos.set( -20, -5, 20);
+		s3d.camera.target.z += 1;
 
 		// add lights and setup materials
 		var dir = new DirLight(new h3d.Vector( -1, 3, -10), s3d);
-		for( m in obj.getMaterials() ) {
-			var t = m.mainPass.getShader(h3d.shader.Texture);
-			if( t != null ) t.killAlpha = true;
-			m.mainPass.culling = None;
-			m.getPass("shadow").culling = None;
-		}
-		s3d.lightSystem.ambientLight.set(0.4, 0.4, 0.4);
+		s3d.lightSystem.ambientLight.set(0.8, 0.8, 0.8);
 
 		var shadow = s3d.renderer.getPass(h3d.pass.DefaultShadowMap);
-		shadow.power = 20;
+		shadow.power = 5;
 		shadow.color.setColor(0x301030);
-		dir.enableSpecular = true;
 
 		new h3d.scene.CameraController(s3d).loadFromCamera();
 	}
