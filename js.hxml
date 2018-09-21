@@ -1,4 +1,5 @@
 -lib heaps
+-lib box2D
 -js bin/js/game.js
 -main Main
 -cp ./src

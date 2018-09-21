@@ -1,8 +1,24 @@
+import box2D.dynamics.B2TimeStep;
 import h3d.scene.*;
+import box2D.dynamics.B2World;
+import box2D.common.math.B2Vec2;
+
 using extensions.ObjectExtensions;
 using extensions.LibraryExtensions;
 
 class Main extends hxd.App {
+	public static var world(default, null) : B2World;
+
+	static var physics_time_step : Float = 1.0 / 60.0;
+	static var velocity_iterations : Int = 6;
+ 	static var position_iterations : Int = 2;
+
+	override function new(physicsWorld:B2World) {
+		wantedFPS = 60.0;		
+		world = physicsWorld;
+
+		super();
+	}
 
 	override function init() {
 		
@@ -28,8 +44,25 @@ class Main extends hxd.App {
 		new h3d.scene.CameraController(s3d).loadFromCamera();
 	}
 
+	override function update(dt:Float) {
+		world.step(
+			physics_time_step, 
+			velocity_iterations, 
+			position_iterations);
+
+		
+	}
+
+	override function render(e:h3d.Engine) {
+		s2d.render(e);
+		s3d.render(e);
+	}
+
 	static function main() {
 		hxd.Res.initEmbed();
-		new Main();
+
+		var physicsWorld : B2World = new B2World(new B2Vec2(0.0, -9.8), true);
+
+		new Main(physicsWorld);
 	}
 }
