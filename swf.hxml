@@ -1,6 +1,6 @@
 -lib heaps
 -lib box2D
--swf game.swf
+-swf bin/swf/game.swf
 -swf-header 1280:800:60:FFFFFF
 -swf-version 15.0
 -main Main
