@@ -23,7 +23,7 @@ class Main extends hxd.App {
 
 	override function init() {
 		var world = new h3d.scene.World(64, 128, s3d);
-		var model = hxd.Res.models.test.icosahedron.toHmd();
+		var model = hxd.Res.models.rocket_ship.toHmd();
 		var obj = model.makeObject();
 		world.addChild(obj);
 
@@ -31,7 +31,7 @@ class Main extends hxd.App {
 			obj.UseVertexColor();
 		}
 
-		s3d.camera.pos.set( -20, -5, 20);
+		s3d.camera.pos.set(0, 200, 0);
 		s3d.camera.target.z += 1;
 
 		var particles = new h3d.parts.GpuParticles(world);
@@ -52,8 +52,6 @@ class Main extends hxd.App {
 		var shadow = s3d.renderer.getPass(h3d.pass.DefaultShadowMap);
 		shadow.power = 5;
 		shadow.color.setColor(0x301030);
-
-		new h3d.scene.CameraController(s3d).loadFromCamera();
 	}
 
 	override function update(dt:Float) {
