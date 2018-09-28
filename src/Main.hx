@@ -1,14 +1,11 @@
-import box2D.dynamics.B2TimeStep;
 import h3d.scene.*;
-import box2D.dynamics.B2World;
+import box2D.dynamics.*;
 import box2D.common.math.B2Vec2;
-
-using extensions.ObjectExtensions;
-using extensions.LibraryExtensions;
 
 class Main extends hxd.App {
 	public static var physics_world(default, null) : B2World;
 	public var world : World;
+	public var ship : Ship;
 
 	static var physics_time_step : Float = 1.0 / 60.0;
 	static var velocity_iterations : Int = 6;
@@ -22,17 +19,11 @@ class Main extends hxd.App {
 	}
 
 	override function init() {
-		var world = new h3d.scene.World(64, 128, s3d);
-		var model = hxd.Res.models.rocket_ship.toHmd();
-		var obj = model.makeObject();
-		world.addChild(obj);
+		world = new h3d.scene.World(64, 128, s3d);
 
-		if (model.HasVertexColors()) {
-			obj.UseVertexColor();
-		}
+		ship = new Ship(this);
 
 		s3d.camera.pos.set(0, 200, 0);
-		s3d.camera.target.z += 1;
 
 		var particles = new h3d.parts.GpuParticles(world);
 		var group = particles.addGroup();
@@ -46,7 +37,6 @@ class Main extends hxd.App {
 		particles.volumeBounds = h3d.col.Bounds.fromValues( -20, -20, 15, 40, 40, 40);
 
 		// add lights and setup materials
-		var dir = new DirLight(new h3d.Vector( -1, 3, -10), s3d);
 		s3d.lightSystem.ambientLight.set(0.8, 0.8, 0.8);
 
 		var shadow = s3d.renderer.getPass(h3d.pass.DefaultShadowMap);
@@ -54,13 +44,23 @@ class Main extends hxd.App {
 		shadow.color.setColor(0x301030);
 	}
 
+	public function get_world() : World {
+		return world;
+	}
+
+	public function get_physics_world() : B2World {
+		return physics_world;
+	}
+
 	override function update(dt:Float) {
+		ship.update_physics();
+		
 		physics_world.step(
 			physics_time_step, 
 			velocity_iterations, 
 			position_iterations);
 
-		
+		ship.update(dt);
 	}
 
 	override function render(e:h3d.Engine) {
