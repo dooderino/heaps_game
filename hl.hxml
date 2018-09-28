@@ -2,7 +2,7 @@
 -lib hldx
 -lib box2D
 -hl bin/hl/game.hl
--main Main
+-main Game
 -D windowSize=1024x768
 -cp ./src
 -D resourcesPath=./resources

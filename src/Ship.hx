@@ -16,9 +16,9 @@ class Ship {
     var object : Object;
     var body : B2Body;
 
-    public function new (main : Main) {
-        var world = main.get_world();
-        var physics_world = main.get_physics_world();
+    public function new (game : Game) {
+        var world = game.get_world();
+        var physics_world = game.get_physics_world();
 
         model = hxd.Res.models.rocket_ship.toHmd();
 		object = model.makeObject();

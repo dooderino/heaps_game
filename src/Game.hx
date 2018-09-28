@@ -2,7 +2,7 @@ import h3d.scene.*;
 import box2D.dynamics.*;
 import box2D.common.math.B2Vec2;
 
-class Main extends hxd.App {
+class Game extends hxd.App {
 	public static var physics_world(default, null) : B2World;
 	public var world : World;
 	public var ship : Ship;
@@ -73,6 +73,6 @@ class Main extends hxd.App {
 
 		var physicsWorld : B2World = new B2World(new B2Vec2(0.0, -9.8), true);
 
-		new Main(physicsWorld);
+		new Game(physicsWorld);
 	}
 }
