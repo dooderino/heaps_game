@@ -1,3 +1,6 @@
+import hxd.Math;
+import hxd.Pad;
+import h3d.Vector;
 import box2D.dynamics.B2FixtureDef;
 import box2D.common.math.B2Vec2;
 import hxd.fmt.hmd.Library;
@@ -12,11 +15,13 @@ using extensions.ObjectExtensions;
 using extensions.LibraryExtensions;
 
 class Ship {
+    var game : Game;
     var model : Library;
     var object : Object;
     var body : B2Body;
 
     public function new (game : Game) {
+        this.game = game;
         var world = game.get_world();
         var physics_world = game.get_physics_world();
 
@@ -40,12 +45,40 @@ class Ship {
 		world.addChild(object);
     }
 
-    public function update_physics() {
-        body.setLinearVelocity(new B2Vec2(0,10));
+    public function get_object():Object {
+        return object;
+    }
+
+    public function update_physics(pad : Pad, dt : Float) {
+        if (pad != null && pad.connected) {
+            var stick = new B2Vec2(pad.xAxis, pad.yAxis);
+            var angle = mod_angle(stick, 2 * Math.PI);
+            body.setAngle(angle);
+
+            if (stick.length() > 0.5) {
+                stick.multiply(1.0 / stick.length());
+                stick.x = stick.x * (5.0 * dt);
+                stick.y = -stick.y * (5.0 * dt);
+                body.setLinearVelocity(stick);
+           } else {
+                stick.multiply(1.0 / stick.length());
+                stick.x = stick.x * (1.0 * dt);
+                stick.y = -stick.y * (1.0 * dt);
+                body.setLinearVelocity(stick);
+
+           }
+       }
     }
 
     public function update(dt : Float) {
+        var angle = body.getAngle();
         var position = body.getPosition();
+
+        object.setRotation(0, angle, 0);
         object.setPosition(position.x, 0, position.y);
+    }
+
+    function mod_angle(input:B2Vec2, wrapAngle:Float):Float {
+        return ((Math.atan2(input.y, input.x) + wrapAngle) % wrapAngle) + (Math.PI * 0.5);
     }
 }
